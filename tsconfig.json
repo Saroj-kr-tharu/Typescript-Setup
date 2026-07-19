@@ -4,28 +4,33 @@
     "moduleResolution": "bundler",
     "target": "ES2022",
     "noEmit": true,
-    "rootDir": "./src" /* Source files root */,
-    "resolveJsonModule": true /* Allow importing .json files */,
-    /* Emit */
-    "outDir": "./dist" /* Compiled output folder */,
-    "sourceMap": true /* Generate source maps for debugging */,
-    "removeComments": true /* Strip comments from compiled output */,
-    "noEmitOnError": true /* Don't emit JS if there are type errors */,
-    /* Interop Constraints */
-    "esModuleInterop": true /* Allows default imports from CommonJS modules */,
-    "allowSyntheticDefaultImports": true /* Allow import x from 'y' for CJS modules */,
-    "forceConsistentCasingInFileNames": true /* Prevent casing bugs on case-insensitive OSes */,
-    /* Type Checking */
-    "strict": true /* Enables all strict type checks */,
-    "useUnknownInCatchVariables": true /* catch(e) => e is unknown not any (TS 4.4+) */,
-    "noUnusedLocals": true /* Error on unused local variables */,
-    "noUnusedParameters": false /* Set true to also enforce unused parameters */,
-    "noImplicitReturns": true /* All code paths must return a value */,
-    "noFallthroughCasesInSwitch": true /* No accidental fallthrough in switch cases */,
-    "noImplicitOverride": true /* Must use override keyword when overriding */,
-    /* Completeness */
-    "skipLibCheck": true /* Skip type checking .d.ts files (faster builds) */
+    "types": [
+      "node"
+    ],
+    // rootDir removed
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+    "removeComments": true,
+    "noEmitOnError": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "useUnknownInCatchVariables": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "skipLibCheck": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*",
+    "prisma.config.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

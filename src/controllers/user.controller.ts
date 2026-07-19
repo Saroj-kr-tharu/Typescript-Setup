@@ -1,24 +1,23 @@
 import { NextFunction, Request, Response } from 'express';
 import todoSVC from '../service/todo.service';
+import userSVC from '../service/user.service';
 import { BadRequestError } from '../utils/errors/app.error';
 import {
-  createTodo,
-  getAllTodos,
-  getTodoById,
-  updateTodo,
-} from '../validators/todo.validator';
+  createUser,
+  getAllUser,
+  getUserById,
+  updateUser
+} from '../validators/user.validator';
 
-export const pingHandler = async (req: Request, res: Response) => {
-  res.status(200).json({ message: 'Pong!' });
-};
 
-export const appCreate = async (
+
+export const userCreate = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const parsed = createTodo.safeParse(req.body);
+    const parsed = createUser.safeParse(req.body);
 
     if (!parsed.success) {
       throw new BadRequestError(
@@ -26,7 +25,7 @@ export const appCreate = async (
       );
     }
 
-    const result = await todoSVC.createService(parsed.data);
+    const result = await userSVC.createService(parsed.data);
 
     res.status(201).json({
       success: true,
@@ -38,35 +37,25 @@ export const appCreate = async (
   }
 };
 
-export const appList = async (
+export const usersList = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const parsed = getAllTodos.safeParse(req.query);
+    const parsed = getAllUser.safeParse(req.query);
     if (!parsed.success) {
       throw new BadRequestError(
         parsed.error.issues.map((i) => i.message).join(', '),
       );
     }
-    const { page, limit, search, color } = parsed.data;
-
-    const { rows, count } = await todoSVC.getAllService(page, limit, {
-      ...(color && { color }),
-      ...(search && {
-        OR: [
-          { title: { contains: search, mode: 'insensitive' } },
-          { description: { contains: search, mode: 'insensitive' } },
-        ],
-      }),
-    });
-
+    const { page, limit } = parsed.data;
+    const { rows, count } = await todoSVC.getAllService(page, limit  );
     const totalPages = Math.ceil(count / limit);
 
     res.status(200).json({
       success: true,
-      message: 'Successfully fetched todos',
+      message: 'Successfully fetched User',
       data: {
         todos: rows,
         pagination: {
@@ -84,20 +73,19 @@ export const appList = async (
   }
 };
 
-export const appById = async (
+export const userById = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const parsed = getTodoById.safeParse(req.params);
+    const parsed = getUserById.safeParse(req.params);
     if (!parsed.success) {
       throw new BadRequestError(
         parsed.error.issues.map((i) => i.message).join(', '),
       );
     }
     const { id } = parsed.data;
-
     const result = await todoSVC.getByIdService({ id });
     if (!result) {
       res.status(404).json({
@@ -118,25 +106,24 @@ export const appById = async (
   }
 };
 
-export const appDeleteById = async (
+export const userDeleteById = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const parsed = getTodoById.safeParse(req.params);
+    const parsed = getUserById.safeParse(req.params);
     if (!parsed.success) {
       throw new BadRequestError(
         parsed.error.issues.map((i) => i.message).join(', '),
       );
     }
     const { id } = parsed.data;
-
     const existing = await todoSVC.getByIdService({ id });
     if (!existing) {
       res.status(404).json({
         success: false,
-        message: `Todo with id ${id} not found`,
+        message: `User with id ${id} not found`,
         data: null,
       });
       return;
@@ -154,13 +141,13 @@ export const appDeleteById = async (
   }
 };
 
-export const updateById = async (
+export const updateUserById = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const paramsParsed = getTodoById.safeParse(req.params);
+    const paramsParsed = getUserById.safeParse(req.params);
     if (!paramsParsed.success) {
       throw new BadRequestError(
         paramsParsed.error.issues.map((i) => i.message).join(', '),
@@ -168,7 +155,7 @@ export const updateById = async (
     }
     const { id } = paramsParsed.data;
 
-    const bodyParsed = updateTodo.safeParse(req.body);
+    const bodyParsed = updateUser.safeParse(req.body);
     if (!bodyParsed.success) {
       throw new BadRequestError(
         bodyParsed.error.issues.map((i) => i.message).join(', '),

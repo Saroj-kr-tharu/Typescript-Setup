@@ -6,8 +6,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
-
 
 model TodoLists { 
   id              Int      @id @default(autoincrement()) 
@@ -18,10 +18,25 @@ model TodoLists {
   updated_at      DateTime @updatedAt
 } 
 
-
 enum Role { 
   GREEN 
   RED
   ORANGE
-
 } 
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+model User { 
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  username      String? 
+  role          UserRole  @default(CUSTOMER)
+  isActive      Boolean   @default(true)
+  password      String    
+  refreshToken  String?  
+}
+
+
