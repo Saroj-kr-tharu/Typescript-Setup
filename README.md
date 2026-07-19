@@ -26,7 +26,8 @@ echo PORT=3000 >> .env
 
 5. Start the express server
 
-```
+````
 npm run dev
-```"# Job-Portal-Assessment" 
-"# Typescript-Setup" 
+```"# Job-Portal-Assessment"
+"# Typescript-Setup"
+````

@@ -6,9 +6,8 @@
  * Interface representing a custom application error.
  */
 export interface AppError extends Error {
-    statusCode: number;
+  statusCode: number;
 }
-
 
 /**
  * Represents an internal server error.
@@ -18,14 +17,14 @@ export interface AppError extends Error {
  * @implements {AppError}
  */
 export class InternalServerError implements AppError {
-    statusCode: number;
-    message: string;
-    name: string;
-    constructor(message: string) {
-        this.statusCode = 500;
-        this.message = message;
-        this.name = "InternalServerError";
-    }
+  statusCode: number;
+  message: string;
+  name: string;
+  constructor(message: string) {
+    this.statusCode = 500;
+    this.message = message;
+    this.name = 'InternalServerError';
+  }
 }
 
 /**
@@ -35,26 +34,25 @@ export class InternalServerError implements AppError {
 
  */
 export class BadRequestError implements AppError {
-    statusCode: number;
-    message: string;
-    name: string;
-    constructor(message: string) {
-        this.statusCode = 400;
-        this.message = message;
-        this.name = "BadRequestError";
-    }
+  statusCode: number;
+  message: string;
+  name: string;
+  constructor(message: string) {
+    this.statusCode = 400;
+    this.message = message;
+    this.name = 'BadRequestError';
+  }
 }
 
-
 export class NotFoundError implements AppError {
-    statusCode: number;
-    message: string;
-    name: string;
-    constructor(message: string) {
-        this.statusCode = 404;
-        this.message = message;
-        this.name = "NotFoundError";
-    }
+  statusCode: number;
+  message: string;
+  name: string;
+  constructor(message: string) {
+    this.statusCode = 404;
+    this.message = message;
+    this.name = 'NotFoundError';
+  }
 }
 
 /**
@@ -62,16 +60,15 @@ export class NotFoundError implements AppError {
  * This error is typically used to indicate that the request requires user authentication.
  */
 export class UnauthorizedError implements AppError {
-    statusCode: number;
-    message: string;
-    name: string;
-    constructor(message: string) {
-        this.statusCode = 401;
-        this.message = message;
-        this.name = "UnauthorizedError";
-    }
+  statusCode: number;
+  message: string;
+  name: string;
+  constructor(message: string) {
+    this.statusCode = 401;
+    this.message = message;
+    this.name = 'UnauthorizedError';
+  }
 }
-
 
 /**
  * Represents a Forbidden error (HTTP 403).
@@ -79,14 +76,14 @@ export class UnauthorizedError implements AppError {
  * but refuses to authorize it.
  */
 export class ForbiddenError implements AppError {
-    statusCode: number;
-    message: string;
-    name: string;
-    constructor(message: string) {
-        this.statusCode = 403;
-        this.message = message;
-        this.name = "ForbiddenError";
-    }
+  statusCode: number;
+  message: string;
+  name: string;
+  constructor(message: string) {
+    this.statusCode = 403;
+    this.message = message;
+    this.name = 'ForbiddenError';
+  }
 }
 
 /**
@@ -95,14 +92,14 @@ export class ForbiddenError implements AppError {
  * due to a conflict with the current state of the target resource.
  */
 export class ConflictError implements AppError {
-    statusCode: number;
-    message: string;
-    name: string;
-    constructor(message: string) {
-        this.statusCode = 409;
-        this.message = message;
-        this.name = "ConflictError";
-    }
+  statusCode: number;
+  message: string;
+  name: string;
+  constructor(message: string) {
+    this.statusCode = 409;
+    this.message = message;
+    this.name = 'ConflictError';
+  }
 }
 
 /**
@@ -111,12 +108,12 @@ export class ConflictError implements AppError {
  * has not been implemented yet.
  */
 export class NotImplementedError implements AppError {
-    statusCode: number;
-    message: string;
-    name: string;
-    constructor(message: string) {
-        this.statusCode = 501;
-        this.message = message;
-        this.name = "NotImplementedError";
-    }
+  statusCode: number;
+  message: string;
+  name: string;
+  constructor(message: string) {
+    this.statusCode = 501;
+    this.message = message;
+    this.name = 'NotImplementedError';
+  }
 }

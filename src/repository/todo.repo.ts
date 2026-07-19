@@ -1,5 +1,5 @@
 import { prismaClient } from '../config/db.config';
-import CrudRepo from "./curd.repo";
+import CrudRepo from './curd.repo';
 
 class TodoRepo extends CrudRepo<typeof prismaClient.todoLists> {
   constructor() {
