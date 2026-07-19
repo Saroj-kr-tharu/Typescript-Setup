@@ -1,0 +1,40 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ES2022", /* Modern JS — supports top-level await, class fields */
+    "lib": [
+      "ES2022"
+    ], /* Match lib to target */
+    /* Modules */
+    "module": "Node16", /* Native Node ESM/CJS support — enables import syntax */
+    "moduleResolution": "Node16", /* Must match module setting */
+    "rootDir": "./src", /* Source files root */
+    "resolveJsonModule": true, /* Allow importing .json files */
+    /* Emit */
+    "outDir": "./dist", /* Compiled output folder */
+    "sourceMap": true, /* Generate source maps for debugging */
+    "removeComments": true, /* Strip comments from compiled output */
+    "noEmitOnError": true, /* Don't emit JS if there are type errors */
+    /* Interop Constraints */
+    "esModuleInterop": true, /* Allows default imports from CommonJS modules */
+    "allowSyntheticDefaultImports": true, /* Allow import x from 'y' for CJS modules */
+    "forceConsistentCasingInFileNames": true, /* Prevent casing bugs on case-insensitive OSes */
+    /* Type Checking */
+    "strict": true, /* Enables all strict type checks */
+    "useUnknownInCatchVariables": true, /* catch(e) => e is unknown not any (TS 4.4+) */
+    "noUnusedLocals": true, /* Error on unused local variables */
+    "noUnusedParameters": false, /* Set true to also enforce unused parameters */
+    "noImplicitReturns": true, /* All code paths must return a value */
+    "noFallthroughCasesInSwitch": true, /* No accidental fallthrough in switch cases */
+    "noImplicitOverride": true, /* Must use override keyword when overriding */
+    /* Completeness */
+    "skipLibCheck": true /* Skip type checking .d.ts files (faster builds) */
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}
