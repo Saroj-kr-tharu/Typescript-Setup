@@ -5,6 +5,9 @@ import logger from './logger.config';
 type ServerConfig = {
   PORT: number;
   FORTEND_URL: string;
+  PRIVATEJWT: string, 
+  RefreshPRIVATEJWT: string,
+  SALT: string
 };
 
 type DBConfig = {
@@ -23,7 +26,10 @@ loadEnv();
 
 export const serverConfig: ServerConfig = {
   PORT: Number(process.env.PORT) || 3001,
-  FORTEND_URL: String(process.env.FORTEND_URL) || 'http://localhost',
+  FORTEND_URL: String(process.env.FORTEND_URL) ,
+  PRIVATEJWT: String(process.env.PRIVATEJWT) ,
+  RefreshPRIVATEJWT: String(process.env.RefreshPRIVATEJWT) ,
+  SALT: String(process.env.SALT) ,
 };
 
 export const dbConfig: DBConfig = {

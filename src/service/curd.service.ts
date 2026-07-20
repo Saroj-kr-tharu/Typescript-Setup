@@ -1,3 +1,4 @@
+import logger from '../config/logger.config';
 import CrudRepo, { PrismaDelegate } from '../repository/curd.repo';
 import { BadRequestError } from '../utils/errors/app.error';
 
@@ -15,7 +16,7 @@ class CrudService<T extends PrismaDelegate> {
       const res = await this.repo.create(data);
       return res;
     } catch (error) {
-      console.error('Something went wrong in service level (create)', error);
+      logger.error('Something went wrong in service level (create)', error);
       throw BadRequestError;
     }
   }
@@ -30,7 +31,7 @@ class CrudService<T extends PrismaDelegate> {
       const res = await this.repo.update(where, data);
       return res;
     } catch (error) {
-      console.error('Something went wrong in service level (update)', error);
+      logger.error('Something went wrong in service level (update)', error);
       throw error;
     }
   }
@@ -44,7 +45,7 @@ class CrudService<T extends PrismaDelegate> {
       const res = await this.repo.delete(where);
       return res;
     } catch (error) {
-      console.error('Something went wrong in service level (delete)', error);
+      logger.error('Something went wrong in service level (delete)', error);
       throw error;
     }
   }
@@ -61,7 +62,7 @@ class CrudService<T extends PrismaDelegate> {
       ]);
       return { rows, count };
     } catch (error) {
-      console.error('Something went wrong in service level (getAll)', error);
+      logger.error('Something went wrong in service level (getAll)', error);
       throw error;
     }
   }
@@ -75,7 +76,7 @@ class CrudService<T extends PrismaDelegate> {
       const res = await this.repo.findById(where);
       return res;
     } catch (error) {
-      console.error('Something went wrong in service level (getById)', error);
+      logger.error('Something went wrong in service level (getById)', error);
       throw error;
     }
   }
