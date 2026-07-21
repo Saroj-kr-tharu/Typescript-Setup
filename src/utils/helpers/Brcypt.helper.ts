@@ -4,7 +4,6 @@ import logger from '../../config/logger.config';
 import { BadRequestError, NotImplementedError } from '../errors/app.error';
 
 
-
 class BcryptHelperClass {
     async checkPasswordService(plainpasword:string, hash:string) {
       try {
@@ -22,7 +21,8 @@ class BcryptHelperClass {
 
     async generateHashService(plainpasword:string): Promise<string> {
        try {
-          const hash = await bcrypt.hash(plainpasword, serverConfig.SALT);
+          const salt = await bcrypt.genSalt(serverConfig.SALT_ROUNDS)
+          const hash = await bcrypt.hash(plainpasword, salt);
           return hash;
         } catch (error) {
             logger.error("Something went wrong in bcrypt helper layer (checkPasswordService)", error);

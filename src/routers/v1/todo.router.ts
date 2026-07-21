@@ -7,7 +7,7 @@ import {
   pingHandler,
   updateById,
 } from '../../controllers/app.controller';
-import { updateUserById, userById, userCreate, userDeleteById, usersList, } from '../../controllers/user.controller';
+import { loginCtrl, userCreate, } from '../../controllers/user.controller';
 import {
   validateParams,
   validateQueryParams,
@@ -20,7 +20,7 @@ import {
   getTodoById,
   updateTodo,
 } from '../../validators/todo.validator';
-import { createUser, getAllUser, getUserById, updateUser } from '../../validators/user.validator';
+import { createUser, loginUser } from '../../validators/user.validator';
 const appRouter = express.Router();
 
 appRouter.get('/', validateRequestBody(pingSchema), pingHandler);
@@ -39,15 +39,8 @@ appRouter.patch(
 
 
 // user router 
-appRouter.post("/user", validateRequestBody(createUser), userCreate)
-appRouter.get('/user', validateQueryParams(getAllUser), usersList);
-appRouter.get('/user/:id', validateParams(getUserById), userById);
-appRouter.delete('/user/:id', validateParams(getUserById), userDeleteById);
-appRouter.patch(
-  '/user/:id',
-  validateParams(getUserById),
-  validateRequestBody(updateUser),
-  updateUserById
-);
+appRouter.post("/auth/register", validateRequestBody(createUser), userCreate)
+appRouter.post('/auth/login', validateRequestBody(loginUser), loginCtrl);
+
 
 export default appRouter;

@@ -7,7 +7,7 @@ type ServerConfig = {
   FORTEND_URL: string;
   PRIVATEJWT: string, 
   RefreshPRIVATEJWT: string,
-  SALT: string
+  SALT_ROUNDS: number
 };
 
 type DBConfig = {
@@ -29,7 +29,7 @@ export const serverConfig: ServerConfig = {
   FORTEND_URL: String(process.env.FORTEND_URL) ,
   PRIVATEJWT: String(process.env.PRIVATEJWT) ,
   RefreshPRIVATEJWT: String(process.env.RefreshPRIVATEJWT) ,
-  SALT: String(process.env.SALT) ,
+  SALT_ROUNDS: Number(process.env.SALT_ROUNDS) ,
 };
 
 export const dbConfig: DBConfig = {

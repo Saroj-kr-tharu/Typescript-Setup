@@ -13,6 +13,7 @@ export const appErrorHandler = (
   res.status(err.statusCode).json({
     success: false,
     message: err.message,
+    error: err
   });
 };
 
@@ -27,5 +28,6 @@ export const genericErrorHandler = (
   res.status(500).json({
     success: false,
     message: 'Internal Server Error',
+    error: err.message
   });
 };
