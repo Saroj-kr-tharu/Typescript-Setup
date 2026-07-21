@@ -7,11 +7,12 @@ import {
   pingHandler,
   updateById,
 } from '../../controllers/app.controller';
-import { loginCtrl, userCreate, } from '../../controllers/user.controller';
+import { changePasswordCtrl, checkTokenCtrl, loginCtrl, userCreate } from '../../controllers/user.controller';
 import {
+  validateHeaders,
   validateParams,
   validateQueryParams,
-  validateRequestBody,
+  validateRequestBody
 } from '../../validators';
 import { pingSchema } from '../../validators/ping.validator';
 import {
@@ -20,7 +21,7 @@ import {
   getTodoById,
   updateTodo,
 } from '../../validators/todo.validator';
-import { createUser, loginUser } from '../../validators/user.validator';
+import { ChangePassword, CheckToken, createUser, loginUser } from '../../validators/user.validator';
 const appRouter = express.Router();
 
 appRouter.get('/', validateRequestBody(pingSchema), pingHandler);
@@ -41,6 +42,8 @@ appRouter.patch(
 // user router 
 appRouter.post("/auth/register", validateRequestBody(createUser), userCreate)
 appRouter.post('/auth/login', validateRequestBody(loginUser), loginCtrl);
+appRouter.get('/auth/token', validateHeaders(CheckToken), checkTokenCtrl);
+appRouter.post('/auth/changepassword', validateHeaders(CheckToken),validateRequestBody(ChangePassword) ,changePasswordCtrl);
 
 
 export default appRouter;

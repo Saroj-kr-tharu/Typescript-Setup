@@ -34,22 +34,15 @@ export const loginUser = z.object({
   password: passwordSchema,
 });
 
-export const updateUser = createUser
-  .partial()
-  .refine((data) => Object.keys(data).length > 0, {
-    message: 'At least one field must be provided to update',
-  });
 
-export const getAllUser = z.object({
-  page: z.coerce.number().int().positive().default(1),
-  limit: z.coerce.number().int().positive().max(100).default(10),
+export const CheckToken = z.object({
+ 'x-access-token': z.string().jwt({ alg: 'HS256' }),
 });
 
-export const getUserById = z.object({
-  id: z.coerce.number().int().positive('Id must be a positive number'),
+export const ChangePassword = z.object({
+ oldPassword: passwordSchema, 
+ newPassword: passwordSchema
 });
 
-export type GetUserByIdParam = z.infer<typeof getUserById>;
+
 export type CreateUserInput = z.infer<typeof createUser>;
-export type UpdateUserInput = z.infer<typeof updateUser>;
-export type GetAllUserQuery = z.infer<typeof getAllUser>;

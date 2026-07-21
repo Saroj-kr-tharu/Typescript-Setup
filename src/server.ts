@@ -45,10 +45,8 @@ app.use('/api/v1', v1Router);
 
 app.use(appErrorHandler);
 app.use(genericErrorHandler);
-logger.info('fortend url => ', serverConfig.FORTEND_URL);
 
 app.listen(serverConfig.PORT, async () => {
-  logger.info(' Database connected');
   logger.info(`Server is running on http://localhost:${serverConfig.PORT}`);
   logger.info(`Press Ctrl+C to stop the server.`);
 });

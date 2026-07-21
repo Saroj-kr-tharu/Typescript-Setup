@@ -10,7 +10,7 @@ export const appErrorHandler = (
 ) => {
   logger.info(err);
 
-  res.status(err.statusCode).json({
+  res.status(err.statusCode || 500).json({
     success: false,
     message: err.message,
     error: err

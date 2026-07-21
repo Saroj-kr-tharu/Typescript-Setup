@@ -87,3 +87,33 @@ export const validateParams = (schema: z.ZodObject<any, any>) => {
     }
   };
 };
+
+
+export const validateHeaders = (schema: z.ZodObject<any, any>) => {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> => {
+    try {
+      await schema.parseAsync(req.headers);
+      next();
+    } catch (error) {
+      if (error instanceof ZodError) {
+        res.status(400).json({
+          success: false,
+          message: 'Invalid Headers',
+          error: error.issues.map((e) => ({
+            field: e.path.join('.'),
+            message: e.message,
+          })),
+        });
+        return;
+      }
+      res.status(400).json({
+        success: false,
+        message: 'Invalid params',
+      });
+    }
+  };
+};

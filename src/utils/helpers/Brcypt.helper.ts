@@ -1,21 +1,19 @@
 import bcrypt from 'bcrypt';
 import { serverConfig } from '../../config';
 import logger from '../../config/logger.config';
-import { BadRequestError, NotImplementedError } from '../errors/app.error';
+import { BadRequestError } from '../errors/app.error';
 
 
 class BcryptHelperClass {
-    async checkPasswordService(plainpasword:string, hash:string) {
+    async checkPasswordService(plainpasword:string, hash:string) : Promise<boolean> {
       try {
-
         const match = bcrypt.compareSync(plainpasword, hash);
-        if (!match) 
-            throw new NotImplementedError('Creditals invlaid');
-      
+        if (!match)  return false
         return match;
       } catch (error) {
           logger.error("Something went wrong in bcrypt helper layer (checkPasswordService)", error);
-          throw new BadRequestError('bcrypt Error')
+            const message = error instanceof Error ? error.message : String(error);
+            throw new Error(message, { cause: error });
         }
     }
 

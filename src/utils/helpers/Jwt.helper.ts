@@ -3,13 +3,13 @@ import Jwt, { JwtPayload, SignOptions } from 'jsonwebtoken';
 import type { StringValue } from 'ms';
 import { serverConfig } from '../../config/index';
 import logger from '../../config/logger.config';
-import { NotImplementedError } from '../errors/app.error';
 
 
 interface UserPayload  extends JwtPayload {
     email: string, 
     username?: string,
-    role: 'CUSTOMER' | 'ADMIN'
+    role: 'CUSTOMER' | 'ADMIN',
+    isActive: boolean
 }
 
 class JwtHelperClass {
@@ -25,7 +25,8 @@ class JwtHelperClass {
 
             } catch (error) {
                 logger.info("Something went wrong in service layer (creating the token)", error);
-                throw new NotImplementedError("jwt error occured")
+                const message = error instanceof Error ? error.message : String(error);
+                throw new Error(message, { cause: error });
             }
         }
 
@@ -40,7 +41,8 @@ class JwtHelperClass {
 
             } catch (error) {
                 logger.info("Something went wrong in service layer (creating the refreshtoken)", error);
-                throw new NotImplementedError("jwt error occured")
+                const message = error instanceof Error ? error.message : String(error);
+                throw new Error(message, { cause: error });
             }
         }
 
@@ -51,7 +53,8 @@ class JwtHelperClass {
             return response;
           } catch (error) {
             logger.info("Error Occured in VerifyToken ", error)
-            throw new NotImplementedError("jwt error occured")
+            const message = error instanceof Error ? error.message : String(error);
+           throw new Error(message, { cause: error });
           }
         }
         
@@ -62,7 +65,8 @@ class JwtHelperClass {
             return response;
           } catch (error) {
             logger.info("Error Occured in VerifyToken ", error)
-            throw new NotImplementedError("jwt error occured")
+            const message = error instanceof Error ? error.message : String(error);
+           throw new Error(message, { cause: error });
           }
         }
         
