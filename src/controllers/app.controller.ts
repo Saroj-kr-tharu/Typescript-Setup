@@ -14,12 +14,11 @@ export const appCreate = async (req: Request, res: Response, next: NextFunction)
     const parsed = createTodo.safeParse(req.body);
     const parsedToken = CheckToken.safeParse({ 'x-access-token': req.headers['x-access-token'] });
 
-    if (!parsed.success) {
-      throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
-    }
-
     if (!parsedToken.success) {
       throw new BadRequestError(parsedToken.error.issues.map((i) => i.message).join(', '));
+    }
+    if (!parsed.success) {
+      throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
     }
 
     const user = await userSVC.checkTokenService(parsedToken.data['x-access-token']);
@@ -42,9 +41,18 @@ export const appList = async (req: Request, res: Response, next: NextFunction) =
     if (!parsed.success) {
       throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
     }
+    const parsedToken = CheckToken.safeParse({ 'x-access-token': req.headers['x-access-token'] });
+
+    if (!parsedToken.success) {
+      throw new BadRequestError(parsedToken.error.issues.map((i) => i.message).join(', '));
+    }
+
+    const user = await userSVC.checkTokenService(parsedToken.data['x-access-token']);
+
     const { page, limit, search, color } = parsed.data;
 
     const { rows, count } = await todoSVC.getAllService(page, limit, {
+      authorId: user.id,
       ...(color && { color }),
       ...(search && {
         OR: [
@@ -84,7 +92,13 @@ export const appById = async (req: Request, res: Response, next: NextFunction) =
     }
     const { id } = parsed.data;
 
-    const result = await todoSVC.getByIdService({ id });
+    const parsedToken = CheckToken.safeParse({ 'x-access-token': req.headers['x-access-token'] });
+    if (!parsedToken.success) {
+      throw new BadRequestError(parsedToken.error.issues.map((i) => i.message).join(', '));
+    }
+    const user = await userSVC.checkTokenService(parsedToken.data['x-access-token']);
+
+    const result = await todoSVC.getByIdService({ id, authorId: Number(user.id) });
     if (!result) {
       res.status(404).json({
         success: false,
@@ -110,9 +124,15 @@ export const appDeleteById = async (req: Request, res: Response, next: NextFunct
     if (!parsed.success) {
       throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
     }
+    const parsedToken = CheckToken.safeParse({ 'x-access-token': req.headers['x-access-token'] });
+    if (!parsedToken.success) {
+      throw new BadRequestError(parsedToken.error.issues.map((i) => i.message).join(', '));
+    }
+    const user = await userSVC.checkTokenService(parsedToken.data['x-access-token']);
+
     const { id } = parsed.data;
 
-    const existing = await todoSVC.getByIdService({ id });
+    const existing = await todoSVC.getByIdService({ id, authorId: Number(user.id) });
     if (!existing) {
       res.status(404).json({
         success: false,
@@ -136,16 +156,21 @@ export const appDeleteById = async (req: Request, res: Response, next: NextFunct
 
 export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const parsedToken = CheckToken.safeParse({ 'x-access-token': req.headers['x-access-token'] });
     const paramsParsed = getTodoById.safeParse(req.params);
+    const bodyParsed = updateTodo.safeParse(req.body);
+
+    if (!parsedToken.success) {
+      throw new BadRequestError(parsedToken.error.issues.map((i) => i.message).join(', '));
+    }
     if (!paramsParsed.success) {
       throw new BadRequestError(paramsParsed.error.issues.map((i) => i.message).join(', '));
     }
-    const { id } = paramsParsed.data;
 
-    const bodyParsed = updateTodo.safeParse(req.body);
     if (!bodyParsed.success) {
       throw new BadRequestError(bodyParsed.error.issues.map((i) => i.message).join(', '));
     }
+    const { id } = paramsParsed.data;
 
     const existing = await todoSVC.getByIdService({ id });
     if (!existing) {
@@ -156,8 +181,9 @@ export const updateById = async (req: Request, res: Response, next: NextFunction
       });
       return;
     }
+    const user = await userSVC.checkTokenService(parsedToken.data['x-access-token']);
 
-    const updated = await todoSVC.updateService({ id }, bodyParsed.data);
+    const updated = await todoSVC.updateService({ id, authorId: Number(user.id) }, bodyParsed.data);
 
     res.status(200).json({
       success: true,
