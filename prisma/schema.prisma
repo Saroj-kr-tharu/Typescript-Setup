@@ -13,6 +13,8 @@ model TodoLists {
   id              Int      @id @default(autoincrement()) 
   title           String   
   description     String?
+  author          User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId        Int   
   color           Role     @default(ORANGE) 
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
@@ -37,6 +39,7 @@ model User {
   isActive      Boolean   @default(true)
   password      String    
   refreshToken  String?  
+  todos         TodoLists[]
 }
 
 

@@ -56,9 +56,6 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "*.prisma": [
-      "prettier --write"
-    ],
     "*.{json,md}": [
       "prettier --write"
     ]

@@ -12,6 +12,7 @@ type loginData = {
 };
 
 interface LoginResponse {
+  id: string;
   email: string;
   role: string;
   isActive: boolean;
@@ -63,18 +64,27 @@ class UserService extends CrudService<typeof prismaClient.user> {
       if (!match) throw new Error('Invalid email or password');
       // 3. create token
       const token = await jwtHelperClass.createToken({
+        id: user.id,
         email: user.email,
         role: user.role,
         isActive: user.isActive,
       });
       // 4. create refresh token
       const refreshToken = await jwtHelperClass.createRefreshToken({
+        id: user.id,
         email: user.email,
         role: user.role,
         isActive: user.isActive,
       });
       // return res
-      return { email: user.email, role: user.role, isActive: user.isActive, token, refreshToken };
+      return {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        isActive: user.isActive,
+        token,
+        refreshToken,
+      };
     } catch (error) {
       logger.info('Error in userCreating ', error);
       const message = error instanceof Error ? error.message : String(error);

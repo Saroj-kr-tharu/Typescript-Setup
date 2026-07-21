@@ -1,32 +1,30 @@
 import { NextFunction, Request, Response } from 'express';
 import todoSVC from '../service/todo.service';
+import userSVC from '../service/user.service';
 import { BadRequestError } from '../utils/errors/app.error';
-import {
-  createTodo,
-  getAllTodos,
-  getTodoById,
-  updateTodo,
-} from '../validators/todo.validator';
+import { createTodo, getAllTodos, getTodoById, updateTodo } from '../validators/todo.validator';
+import { CheckToken } from '../validators/user.validator';
 
 export const pingHandler = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Pong!' });
 };
 
-export const appCreate = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const appCreate = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const parsed = createTodo.safeParse(req.body);
+    const parsedToken = CheckToken.safeParse({ 'x-access-token': req.headers['x-access-token'] });
 
     if (!parsed.success) {
-      throw new BadRequestError(
-        parsed.error.issues.map((i) => i.message).join(', '),
-      );
+      throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
     }
 
-    const result = await todoSVC.createService(parsed.data);
+    if (!parsedToken.success) {
+      throw new BadRequestError(parsedToken.error.issues.map((i) => i.message).join(', '));
+    }
+
+    const user = await userSVC.checkTokenService(parsedToken.data['x-access-token']);
+
+    const result = await todoSVC.createService({ ...parsed.data, authorId: Number(user.id) });
 
     res.status(201).json({
       success: true,
@@ -38,17 +36,11 @@ export const appCreate = async (
   }
 };
 
-export const appList = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const appList = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const parsed = getAllTodos.safeParse(req.query);
     if (!parsed.success) {
-      throw new BadRequestError(
-        parsed.error.issues.map((i) => i.message).join(', '),
-      );
+      throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
     }
     const { page, limit, search, color } = parsed.data;
 
@@ -84,17 +76,11 @@ export const appList = async (
   }
 };
 
-export const appById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const appById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const parsed = getTodoById.safeParse(req.params);
     if (!parsed.success) {
-      throw new BadRequestError(
-        parsed.error.issues.map((i) => i.message).join(', '),
-      );
+      throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
     }
     const { id } = parsed.data;
 
@@ -118,17 +104,11 @@ export const appById = async (
   }
 };
 
-export const appDeleteById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const appDeleteById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const parsed = getTodoById.safeParse(req.params);
     if (!parsed.success) {
-      throw new BadRequestError(
-        parsed.error.issues.map((i) => i.message).join(', '),
-      );
+      throw new BadRequestError(parsed.error.issues.map((i) => i.message).join(', '));
     }
     const { id } = parsed.data;
 
@@ -154,25 +134,17 @@ export const appDeleteById = async (
   }
 };
 
-export const updateById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
+export const updateById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const paramsParsed = getTodoById.safeParse(req.params);
     if (!paramsParsed.success) {
-      throw new BadRequestError(
-        paramsParsed.error.issues.map((i) => i.message).join(', '),
-      );
+      throw new BadRequestError(paramsParsed.error.issues.map((i) => i.message).join(', '));
     }
     const { id } = paramsParsed.data;
 
     const bodyParsed = updateTodo.safeParse(req.body);
     if (!bodyParsed.success) {
-      throw new BadRequestError(
-        bodyParsed.error.issues.map((i) => i.message).join(', '),
-      );
+      throw new BadRequestError(bodyParsed.error.issues.map((i) => i.message).join(', '));
     }
 
     const existing = await todoSVC.getByIdService({ id });
