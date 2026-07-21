@@ -3,33 +3,30 @@ import { serverConfig } from '../../config';
 import logger from '../../config/logger.config';
 import { BadRequestError } from '../errors/app.error';
 
-
 class BcryptHelperClass {
-    async checkPasswordService(plainpasword:string, hash:string) : Promise<boolean> {
-      try {
-        const match = bcrypt.compareSync(plainpasword, hash);
-        if (!match)  return false
-        return match;
-      } catch (error) {
-          logger.error("Something went wrong in bcrypt helper layer (checkPasswordService)", error);
-            const message = error instanceof Error ? error.message : String(error);
-            throw new Error(message, { cause: error });
-        }
+  async checkPasswordService(plainpasword: string, hash: string): Promise<boolean> {
+    try {
+      const match = bcrypt.compareSync(plainpasword, hash);
+      if (!match) return false;
+      return match;
+    } catch (error) {
+      logger.error('Something went wrong in bcrypt helper layer (checkPasswordService)', error);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(message, { cause: error });
     }
+  }
 
-    async generateHashService(plainpasword:string): Promise<string> {
-       try {
-          const salt = await bcrypt.genSalt(serverConfig.SALT_ROUNDS)
-          const hash = await bcrypt.hash(plainpasword, salt);
-          return hash;
-        } catch (error) {
-            logger.error("Something went wrong in bcrypt helper layer (checkPasswordService)", error);
-            throw new BadRequestError('bcrypt Error')
-          }
+  async generateHashService(plainpasword: string): Promise<string> {
+    try {
+      const salt = await bcrypt.genSalt(serverConfig.SALT_ROUNDS);
+      const hash = await bcrypt.hash(plainpasword, salt);
+      return hash;
+    } catch (error) {
+      logger.error('Something went wrong in bcrypt helper layer (checkPasswordService)', error);
+      throw new BadRequestError('bcrypt Error');
     }
-
+  }
 }
 
-
-const bcryptHelper= new BcryptHelperClass();
+const bcryptHelper = new BcryptHelperClass();
 export default bcryptHelper;
